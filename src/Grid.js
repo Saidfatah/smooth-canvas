@@ -1,14 +1,7 @@
 // Dependencies
 import React, { useEffect, useRef } from "react";
 
-let WIDTH;
-let HEIGHT = window.innerHeight;
-if (typeof window !== "undefined") {
-  WIDTH = window.innerWidth;
-  HEIGHT = window.innerHeight;
-}
-
-const Grid = () => {
+const Grid = ({ WIDTH, HEIGHT }) => {
   const canvasRef = useRef();
 
   useEffect(() => {
