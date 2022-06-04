@@ -17,31 +17,16 @@ const App = () => {
   const dragDropCanvasRef = useRef();
   const shapes = [Shape()];
   const canDragShapes = useRef(false);
+  const firstRender = useRef(true);
   const mouseStartXPosition = useRef(0);
   const mouseStartYPosition = useRef(0);
-
-  useEffect(() => {
-    if (!dragDropCanvasRef.current) return;
-    const dragAndDropCanvas = dragDropCanvasRef.current;
-    //dragAndDropCanvas.addEventListener('mousedown',onMouseDown)
-    //dragAndDropCanvas.addEventListener('mouseup',onMouseUp)
-    //dragAndDropCanvas.addEventListener('mousemove',onMouseMove)
-    var ctx = dragAndDropCanvas.getContext("2d");
-    var BB = dragAndDropCanvas.getBoundingClientRect();
-    var offsetX = BB.left;
-    var offsetY = BB.top;
-
-    refreshCanvasScene(ctx);
-    dragAndDropCanvas.onmousedown = onMouseDown(offsetX, offsetY);
-    dragAndDropCanvas.onmouseup = onMouseUp(ctx);
-    dragAndDropCanvas.onmousemove = onMouseMove(ctx, offsetX, offsetY);
-  }, []);
 
   const onMouseDown = (offsetX, offsetY) => (e) => {
     // tell the browser we're handling this mouse event
     e.preventDefault();
     e.stopPropagation();
 
+    console.log(e);
     // get the current mouse position
     var mx = parseInt(e.clientX - offsetX);
     var my = parseInt(e.clientY - offsetY);
@@ -108,8 +93,31 @@ const App = () => {
     }
   };
 
+  useEffect(() => {
+    if (!dragDropCanvasRef.current) return;
+    const dragAndDropCanvas = dragDropCanvasRef.current;
+    //dragAndDropCanvas.addEventListener('mousedown',onMouseDown)
+    //dragAndDropCanvas.addEventListener('mouseup',onMouseUp)
+    //dragAndDropCanvas.addEventListener('mousemove',onMouseMove)
+    var ctx = dragAndDropCanvas.getContext("2d");
+    var BB = dragAndDropCanvas.getBoundingClientRect();
+    var offsetX = BB.left;
+    var offsetY = BB.top;
+    if (firstRender.current) {
+      refreshCanvasScene(ctx);
+      firstRender.current = false;
+    }
+    dragAndDropCanvas.addEventListener(
+      "mousedown",
+      onMouseDown(offsetX, offsetY)
+    );
+    /* dragAndDropCanvas.onmouseup = onMouseUp(ctx);
+    dragAndDropCanvas.onmousemove = onMouseMove(ctx, offsetX, offsetY); */
+  }, [onMouseDown]);
+
   // redraw the scene
   function refreshCanvasScene(ctx, width, height) {
+    console.log(ctx);
     if (!ctx) return;
     clearCanvasArea(ctx, WIDTH, HEIGHT);
     ctx.fillStyle = "#FAF7F8";
