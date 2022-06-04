@@ -6,7 +6,8 @@
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-scripts": "3.0.1",
-    "tailwindcss": "1.8.4"
+    "tailwindcss": "1.8.4",
+    "uuid": "8.3.2"
   },
   "scripts": {
     "build:tailwind": "tailwindcss build src/tailwind.css -o src/tailwind.output.css",
